@@ -7,20 +7,17 @@ use App\Models\Appointment;
 
 class AppointmentController extends Controller
 {
-    /**
-     * Obtener todas las citas con solo los nombres de cliente, empleado y servicio.
-     */
+    
     public function index()
     {
         $appointments = Appointment::with(['customer', 'employee', 'service'])->get();
 
-        // Transformar los datos para devolver solo los nombres
         $formattedAppointments = $appointments->map(function ($appointment) {
             return [
                 "id" => $appointment->id,
-                "customer_name" => $appointment->customer->name, // Nombre del cliente
-                "employee_name" => $appointment->employee->name, // Nombre del empleado
-                "service_name" => $appointment->service->name,   // Nombre del servicio
+                "customer_name" => $appointment->customer->name, 
+                "employee_name" => $appointment->employee->name, 
+                "service_name" => $appointment->service->name,   
                 "date" => $appointment->date,
                 "start_date" => $appointment->start_date,
                 "end_date" => $appointment->end_date,
@@ -33,9 +30,7 @@ class AppointmentController extends Controller
         return response()->json($formattedAppointments, 200);
     }
 
-    /**
-     * Crear una nueva cita.
-     */
+    
     public function store(Request $request)
     {
         $request->validate([
@@ -56,9 +51,7 @@ class AppointmentController extends Controller
         ], 201);
     }
 
-    /**
-     * Obtener una cita específica con solo los nombres.
-     */
+    
     public function show($id)
     {
         $appointment = Appointment::with(['customer', 'employee', 'service'])->find($id);
@@ -67,12 +60,11 @@ class AppointmentController extends Controller
             return response()->json(['message' => 'Cita no encontrada'], 404);
         }
 
-        // Devolver solo la información necesaria
         $formattedAppointment = [
             "id" => $appointment->id,
-            "customer_name" => $appointment->customer->name, // Nombre del cliente
-            "employee_name" => $appointment->employee->name, // Nombre del empleado
-            "service_name" => $appointment->service->name,   // Nombre del servicio
+            "customer_name" => $appointment->customer->name, 
+            "employee_name" => $appointment->employee->name, 
+            "service_name" => $appointment->service->name,
             "date" => $appointment->date,
             "start_date" => $appointment->start_date,
             "end_date" => $appointment->end_date,
@@ -84,9 +76,7 @@ class AppointmentController extends Controller
         return response()->json($formattedAppointment, 200);
     }
 
-    /**
-     * Actualizar una cita.
-     */
+    
     public function update(Request $request, $id)
     {
         $appointment = Appointment::find($id);
@@ -113,9 +103,7 @@ class AppointmentController extends Controller
         ], 200);
     }
 
-    /**
-     * Eliminar una cita.
-     */
+    
     public function destroy($id)
     {
         $appointment = Appointment::find($id);
