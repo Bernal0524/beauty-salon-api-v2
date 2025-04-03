@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    /**
+     * Inicia sesión y genera un token de acceso.
+     */
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -28,6 +31,9 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * Cierra sesión y revoca el token actual.
+     */
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
@@ -35,8 +41,15 @@ class AuthController extends Controller
         return response()->json(['message' => 'Sesión cerrada correctamente']);
     }
 
+    /**
+     * Retorna los datos del usuario autenticado.
+     */
     public function profile(Request $request)
     {
         return response()->json($request->user());
     }
+
+    // Este espacio estaba reservado en la rama main para lógica futura
+    // Puedes usarlo para agregar otras funciones relacionadas a autenticación
 }
+

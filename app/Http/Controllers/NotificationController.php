@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
-    // Ver historial de notificaciones
+    /**
+     * Muestra el historial de notificaciones.
+     */
     public function index()
     {
         $notifications = Notification::with(['customer', 'employee'])->latest()->get();
@@ -18,7 +20,9 @@ class NotificationController extends Controller
         ]);
     }
 
-    // Enviar notificación manualmente
+    /**
+     * Envía una notificación manualmente.
+     */
     public function send(Request $request)
     {
         $validated = $request->validate([
@@ -36,4 +40,6 @@ class NotificationController extends Controller
             'data' => $notification,
         ], 201);
     }
+
+    // Aquí podés agregar más lógica relacionada a notificaciones en el futuro
 }
