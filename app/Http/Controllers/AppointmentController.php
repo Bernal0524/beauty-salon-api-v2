@@ -8,13 +8,29 @@ use App\Models\Appointment;
 class AppointmentController extends Controller
 {
     /**
-     * Obtener todas las citas.
+     * Obtener todas las citas con solo los nombres de cliente, empleado y servicio.
      */
     public function index()
     {
         $appointments = Appointment::with(['customer', 'employee', 'service'])->get();
 
-        return response()->json($appointments, 200);
+        // Transformar los datos para devolver solo los nombres
+        $formattedAppointments = $appointments->map(function ($appointment) {
+            return [
+                "id" => $appointment->id,
+                "customer_name" => $appointment->customer->name, // Nombre del cliente
+                "employee_name" => $appointment->employee->name, // Nombre del empleado
+                "service_name" => $appointment->service->name,   // Nombre del servicio
+                "date" => $appointment->date,
+                "start_date" => $appointment->start_date,
+                "end_date" => $appointment->end_date,
+                "status" => $appointment->status,
+                "created_at" => $appointment->created_at,
+                "updated_at" => $appointment->updated_at,
+            ];
+        });
+
+        return response()->json($formattedAppointments, 200);
     }
 
     /**
@@ -41,7 +57,7 @@ class AppointmentController extends Controller
     }
 
     /**
-     * Obtener una cita específica.
+     * Obtener una cita específica con solo los nombres.
      */
     public function show($id)
     {
@@ -51,7 +67,21 @@ class AppointmentController extends Controller
             return response()->json(['message' => 'Cita no encontrada'], 404);
         }
 
-        return response()->json($appointment, 200);
+        // Devolver solo la información necesaria
+        $formattedAppointment = [
+            "id" => $appointment->id,
+            "customer_name" => $appointment->customer->name, // Nombre del cliente
+            "employee_name" => $appointment->employee->name, // Nombre del empleado
+            "service_name" => $appointment->service->name,   // Nombre del servicio
+            "date" => $appointment->date,
+            "start_date" => $appointment->start_date,
+            "end_date" => $appointment->end_date,
+            "status" => $appointment->status,
+            "created_at" => $appointment->created_at,
+            "updated_at" => $appointment->updated_at,
+        ];
+
+        return response()->json($formattedAppointment, 200);
     }
 
     /**
