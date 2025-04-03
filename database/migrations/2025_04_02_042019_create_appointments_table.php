@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('customer_id')->constrained()->onDelete('cascade'); // Relación con clientes
             $table->foreignId('employee_id')->constrained()->onDelete('cascade');
             $table->foreignId('service_id')->constrained()->onDelete('cascade');
+            $table->dateTime('date');
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->string('status'); // Puede ser 'pendiente', 'confirmada', 'cancelada'
